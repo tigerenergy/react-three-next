@@ -150,10 +150,10 @@ function DynamicParticleEffect({ currentSection }) {
 
   useEffect(() => {
     const fovMap = {
-      1: 20,
-      2: 60,
+      1: 10,
+      2: 50,
       3: 100,
-      4: 130,
+      4: 150,
       5: 200,
     }
 
