@@ -1,46 +1,41 @@
+// Page.js
 'use client'
 import { Suspense, useEffect, useState, useRef } from 'react'
 import { motion, useTransform, useScroll } from 'framer-motion'
 import { Canvas, useThree } from '@react-three/fiber'
 import { ChevronDown } from 'lucide-react'
 import ParticleEffect from '../src/3d/ParticleEffect'
+import { EffectComposer, Bloom, DepthOfField } from '@react-three/postprocessing'
 
 export default function Page() {
   const [isClient, setIsClient] = useState(false)
-  const [currentSection, setCurrentSection] = useState(0) // Track current section
+  const [currentSection, setCurrentSection] = useState(0)
 
   useEffect(() => {
     setIsClient(true)
   }, [])
 
-  // Framer Motion's useScroll to track scroll position
   const { scrollY } = useScroll()
-
-  // Transformations for the first section
-  const logoOpacity = useTransform(scrollY, [0, 300], [1, 0]) // Fades out
-  const logoScale = useTransform(scrollY, [0, 300], [1, 2]) // Grows larger
-
-  // Animation variants for line-by-line text appearance
+  const logoOpacity = useTransform(scrollY, [0, 300], [1, 0])
+  const logoScale = useTransform(scrollY, [0, 300], [1, 2])
   const lineVariants = {
     hidden: { opacity: 0, y: 50 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: 'easeOut', staggerChildren: 0.3 } },
   }
 
-  // References to each section
   const sectionsRef = [useRef(null), useRef(null), useRef(null), useRef(null), useRef(null)]
 
-  // Set up the intersection observer
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             const sectionIndex = sectionsRef.findIndex((ref) => ref.current === entry.target)
-            setCurrentSection(sectionIndex + 1) // Section index starts from 1
+            setCurrentSection(sectionIndex + 1)
           }
         })
       },
-      { threshold: 0.6 }, // Adjust as needed for visibility threshold
+      { threshold: 0.6 },
     )
 
     sectionsRef.forEach((ref) => {
@@ -54,13 +49,11 @@ export default function Page() {
     }
   }, [])
 
-  // Consistent font style class for all sections
   const headingClass = 'text-4xl font-bold sm:text-5xl md:text-6xl lg:text-7xl'
   const paragraphClass = 'mt-4 text-xl sm:text-2xl md:text-3xl lg:text-4xl'
 
   return (
     <div className='relative w-full min-h-screen overflow-hidden text-white bg-black'>
-      {/* Particle Background with Dynamic FOV */}
       {isClient && (
         <motion.div
           style={{ opacity: logoOpacity }}
@@ -92,7 +85,7 @@ export default function Page() {
           >
             <div className='flex flex-col items-center text-lg font-bold tracking-wide uppercase'>
               <span>Scroll to Explore</span>
-              <ChevronDown className='w-6 h-6 mt-2 text-[#1a2ffb] animate-bounce' />
+              <ChevronDown className='w-6 h-6 mt-2 text-white animate-bounce' />
             </div>
           </motion.div>
         </section>
@@ -151,12 +144,11 @@ export default function Page() {
   )
 }
 
-// DynamicParticleEffect Component with Section-Based FOV Update
+// DynamicParticleEffect Component with Section-Based FOV Update and Bloom Effect
 function DynamicParticleEffect({ currentSection }) {
   const { camera } = useThree()
 
   useEffect(() => {
-    // Manually set fov based on the current section
     const fovMap = {
       1: 20,
       2: 60,
@@ -170,7 +162,12 @@ function DynamicParticleEffect({ currentSection }) {
   }, [currentSection, camera])
 
   return (
-    // Placeholder for particle system or other 3D objects
-    <ParticleEffect />
+    <>
+      <ParticleEffect />
+      <EffectComposer>
+        <Bloom luminanceThreshold={0.1} luminanceSmoothing={0.9} intensity={1.5} />
+        <DepthOfField focusDistance={0} focalLength={0.02} bokehScale={2} height={480} />
+      </EffectComposer>
+    </>
   )
 }
