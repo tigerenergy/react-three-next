@@ -3,7 +3,7 @@
 import { Suspense, useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { Canvas } from '@react-three/fiber'
-import { MoreHorizontal, ChevronDown, ArrowRight } from 'lucide-react'
+import { ChevronDown } from 'lucide-react'
 import ParticleEffect from '../src/3d/ParticleEffect'
 
 export default function Page() {
@@ -23,34 +23,19 @@ export default function Page() {
       {/* Header Section */}
       <div className='absolute z-10 flex items-center justify-between top-8 left-8 right-8'>
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1 }}>
-          <h1 className='text-[3rem] font-bold'>CNDF</h1>
+          <img src='/logo.svg' alt='CNDF Logo' className='w-32 h-32 text-white' />
         </motion.div>
-
-        <div className='flex items-center space-x-4'>
-          <div className='flex items-center justify-center w-8 h-8 rounded-full bg-lime-400 animate-pulse'>
-            <div className='w-4 h-4 bg-white rounded-full' />
-          </div>
-          <button className='flex items-center px-4 py-2 space-x-2 font-semibold text-white transition duration-300 transform bg-gray-800 rounded-full hover:bg-lime-400 hover:scale-105'>
-            <ArrowRight />
-            <span className='tracking-wide uppercase'>Let's Talk</span>
-          </button>
-          <button className='flex items-center px-4 py-2 font-semibold text-black transition duration-300 transform bg-gray-300 rounded-full hover:bg-lime-400 hover:scale-105'>
-            <span className='tracking-wide uppercase'>Menu</span>
-            <div className='ml-1 transition-transform duration-300 transform hover:rotate-90'>
-              <MoreHorizontal />
-            </div>
-          </button>
-        </div>
       </div>
 
-      {/* Large Centered Text */}
+      {/* Large Centered Logo */}
       <motion.div
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 1.2, ease: 'easeOut' }}
         className='absolute inset-0 z-10 flex flex-col items-center justify-center'
       >
-        <h1 className='text-[17rem] md:text-[25rem] font-bold leading-none tracking-tight'>CNDF</h1>
+        <img src='/logo.svg' alt='CNDF Logo' className='text-white w-[30rem] md:w-[40rem]' />
+        {/* Larger centered logo */}
       </motion.div>
 
       {/* Scroll Instruction */}
