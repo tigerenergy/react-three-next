@@ -92,7 +92,7 @@ export default function Page() {
           >
             <div className='flex flex-col items-center text-lg font-bold tracking-wide uppercase'>
               <span>Scroll to Explore</span>
-              <ChevronDown className='w-6 h-6 mt-2 text-blue-600 animate-bounce' />
+              <ChevronDown className='w-6 h-6 mt-2 text-[#AACF37] animate-bounce' />
             </div>
           </motion.div>
         </section>
