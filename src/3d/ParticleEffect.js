@@ -6,7 +6,7 @@ import * as THREE from 'three'
 
 export default function ParticleEffect() {
   const pointsRef = useRef()
-  const color = new THREE.Color('#AACF37') // Set the color to the bright blue from the image
+  const color = new THREE.Color('#1a2ffb') // Set the color to the bright blue from the image
 
   // Create random positions for particles
   const particleCount = 20000
