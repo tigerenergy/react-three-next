@@ -22,7 +22,7 @@ export default function Page() {
     visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: 'easeOut', staggerChildren: 0.3 } },
   }
 
-  const sectionsRef = Array.from({ length: 11 }, () => useRef(null))
+  const sectionsRef = useRef(Array.from({ length: 11 }, () => React.createRef()))
 
   useEffect(() => {
     const observer = new IntersectionObserver(
