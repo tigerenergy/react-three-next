@@ -1,5 +1,5 @@
 'use client'
-import { Suspense, useEffect, useState, useRef } from 'react'
+import React, { Suspense, useEffect, useState, useRef } from 'react'
 import { motion, useTransform, useScroll } from 'framer-motion'
 import { Canvas, useThree } from '@react-three/fiber'
 import { ChevronDown } from 'lucide-react'
