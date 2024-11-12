@@ -90,7 +90,6 @@ export default function ParticleEffect({
         }
       }
 
-      // Update particle positions
       pointsRef.current.geometry.attributes.position.needsUpdate = true
     }
   })
