@@ -1,4 +1,3 @@
-// Page.js
 'use client'
 import { Suspense, useEffect, useState, useRef } from 'react'
 import { motion, useTransform, useScroll } from 'framer-motion'
@@ -23,7 +22,7 @@ export default function Page() {
     visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: 'easeOut', staggerChildren: 0.3 } },
   }
 
-  const sectionsRef = [useRef(null), useRef(null), useRef(null), useRef(null), useRef(null), useRef(null)]
+  const sectionsRef = Array.from({ length: 11 }, () => useRef(null))
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -50,7 +49,7 @@ export default function Page() {
   }, [])
 
   const headingClass = 'text-4xl font-bold sm:text-5xl md:text-6xl lg:text-7xl uppercase'
-  const paragraphClass = 'mt-4 text-xl sm:text-2xl md:text-3xl lg:text-4xl'
+  const paragraphClass = 'mt-4 text-xl sm:text-2xl md:text-3xl lg:text-4xl uppercase'
 
   return (
     <div className='relative w-full min-h-screen overflow-hidden text-white bg-black'>
@@ -117,7 +116,10 @@ export default function Page() {
           </motion.div>
         </section>
 
-        <section className='relative flex items-center justify-center min-h-screen snap-center' ref={sectionsRef[3]}>
+        <section
+          className='relative flex items-center justify-center min-h-screen uppercase snap-center'
+          ref={sectionsRef[3]}
+        >
           <motion.div initial='hidden' whileInView='visible' variants={lineVariants} className='text-center'>
             <motion.h2 className={headingClass} variants={lineVariants}>
               다양한 마케팅 프로젝트 수행
@@ -151,32 +153,118 @@ export default function Page() {
             </motion.p>
           </motion.div>
         </section>
+
+        {/* Additional Sections */}
+        <section className='relative flex items-center justify-center min-h-screen snap-center' ref={sectionsRef[6]}>
+          <motion.div initial='hidden' whileInView='visible' variants={lineVariants} className='text-center'>
+            <motion.h2 className={headingClass} variants={lineVariants}>
+              개발
+            </motion.h2>
+            <motion.h3 className={paragraphClass} variants={lineVariants}>
+              development
+            </motion.h3>
+            <motion.p className={paragraphClass} variants={lineVariants}>
+              CNDF만의 독자적 플랫폼을 통한 빠르고 정확한 개발(One Source Multi Use) 자체 플랫폼 사용으로 유지보수 용이
+            </motion.p>
+          </motion.div>
+        </section>
+
+        <section className='relative flex items-center justify-center min-h-screen snap-center' ref={sectionsRef[7]}>
+          <motion.div initial='hidden' whileInView='visible' variants={lineVariants} className='text-center'>
+            <motion.h2 className={headingClass} variants={lineVariants}>
+              운영
+            </motion.h2>
+            <motion.h3 className={paragraphClass} variants={lineVariants}>
+              operation
+            </motion.h3>
+            <motion.p className={paragraphClass} variants={lineVariants}>
+              고객사의 Pop-up 디자인 변경 등 S/W 업데이트 및 운영의 빠른 대응 (고객 요구 T+1 이내 피드백 및 계획수립)
+            </motion.p>
+          </motion.div>
+        </section>
+
+        <section className='relative flex items-center justify-center min-h-screen snap-center' ref={sectionsRef[8]}>
+          <motion.div initial='hidden' whileInView='visible' variants={lineVariants} className='text-center'>
+            <motion.h2 className={headingClass} variants={lineVariants}>
+              마케팅
+            </motion.h2>
+            <motion.h3 className={paragraphClass} variants={lineVariants}>
+              marketing
+            </motion.h3>
+            <motion.p className={paragraphClass} variants={lineVariants}>
+              연 2회 이상 Major Update, 해당 시스템에 해당하는 배포 전략 및 시장 현황에 맞는 바이럴 마케팅/SNS 마케팅 등
+            </motion.p>
+          </motion.div>
+        </section>
+
+        <section className='relative flex items-center justify-center min-h-screen snap-center' ref={sectionsRef[9]}>
+          <motion.div initial='hidden' whileInView='visible' variants={lineVariants} className='text-center'>
+            <motion.h2 className={headingClass} variants={lineVariants}>
+              하드웨어
+            </motion.h2>
+            <motion.h3 className={paragraphClass} variants={lineVariants}>
+              hardware
+            </motion.h3>
+            <motion.p className={paragraphClass} variants={lineVariants}>
+              Co-Location이 아닌 CNDF만의 단독 호스팅을 통한 서버 및 하드웨어 유지보수를 통해 비용 절감 및 보안성
+              확보(ISP 통합 관제)와 하드웨어 장애 시 (M+20 이내) 장애대응 및 복구
+            </motion.p>
+          </motion.div>
+        </section>
+
+        <section className='relative flex items-center justify-center min-h-screen snap-center' ref={sectionsRef[10]}>
+          <motion.div initial='hidden' whileInView='visible' variants={lineVariants} className='text-center'>
+            <motion.h2 className={headingClass} variants={lineVariants}>
+              대고객 서비스
+            </motion.h2>
+            <motion.h3 className={paragraphClass} variants={lineVariants}>
+              customized service
+            </motion.h3>
+            <motion.p className={paragraphClass} variants={lineVariants}>
+              CNDF만의 유지보수 방법론을 통한 대고객 서비스 운영
+            </motion.p>
+          </motion.div>
+        </section>
       </div>
     </div>
   )
 }
 
-// DynamicParticleEffect Component with Section-Based FOV Update and Bloom Effect
 function DynamicParticleEffect({ currentSection }) {
   const { camera } = useThree()
 
   useEffect(() => {
     const fovMap = {
-      1: 10,
+      1: 1,
       2: 50,
       3: 100,
       4: 150,
       5: 200,
-      6: 300, // Zoom effect for the last section to gather particles at the center
+      6: 300,
+      7: 300,
+      8: 300,
+      9: 300,
+      10: 300,
     }
 
     camera.fov = fovMap[currentSection] || 60
     camera.updateProjectionMatrix()
   }, [currentSection, camera])
 
+  // Set effect parameters based on section
+  const continuousRotation = currentSection >= 1 && currentSection <= 5
+  const heartbeatIntensity = currentSection >= 6 && currentSection < 11 ? Math.min(1, (currentSection - 5) * 0.25) : 0
+  const burst = currentSection === 11
+
   return (
     <>
-      <ParticleEffect gather={currentSection === 6} />
+      <ParticleEffect
+        gather={currentSection >= 6 && currentSection < 11}
+        continuousRotation={continuousRotation}
+        heartbeatIntensity={heartbeatIntensity}
+        minDistance={heartbeatIntensity > 0 ? 1 + (1 - heartbeatIntensity) * 3 : 4}
+        burst={burst}
+      />
       <EffectComposer>
         <Bloom luminanceThreshold={0.1} luminanceSmoothing={0.9} intensity={1.5} />
         <DepthOfField focusDistance={0} focalLength={0.02} bokehScale={2} height={480} />
