@@ -9,6 +9,7 @@ import { EffectComposer, Bloom, DepthOfField } from '@react-three/postprocessing
 export default function Page() {
   const [isClient, setIsClient] = useState(false)
   const [currentSection, setCurrentSection] = useState(0)
+  const sectionsRef = useRef([...Array(11)].map(() => React.createRef()))
 
   useEffect(() => {
     setIsClient(true)
@@ -22,27 +23,27 @@ export default function Page() {
     visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: 'easeOut', staggerChildren: 0.3 } },
   }
 
-  const sectionsRef = useRef(Array.from({ length: 11 }, () => React.createRef()))
-
   useEffect(() => {
+    if (!sectionsRef.current) return
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            const sectionIndex = sectionsRef.findIndex((ref) => ref.current === entry.target)
-            setCurrentSection(sectionIndex + 1)
+            const sectionIndex = sectionsRef.current.findIndex((ref) => ref.current === entry.target)
+            if (sectionIndex !== -1) setCurrentSection(sectionIndex + 1)
           }
         })
       },
       { threshold: 0.6 },
     )
 
-    sectionsRef.forEach((ref) => {
+    sectionsRef.current.forEach((ref) => {
       if (ref.current) observer.observe(ref.current)
     })
 
     return () => {
-      sectionsRef.forEach((ref) => {
+      sectionsRef.current.forEach((ref) => {
         if (ref.current) observer.unobserve(ref.current)
       })
     }
@@ -70,7 +71,11 @@ export default function Page() {
 
       {/* Scroll Container with Snap */}
       <div className='h-screen overflow-y-scroll snap-y snap-mandatory'>
-        <section className='relative flex items-center justify-center min-h-screen snap-center' ref={sectionsRef[0]}>
+        {/* First Full-Screen Section with Logo */}
+        <section
+          className='relative flex items-center justify-center min-h-screen snap-center'
+          ref={sectionsRef.current[0]}
+        >
           <motion.div
             style={{ opacity: logoOpacity, scale: logoScale }}
             className='absolute inset-0 z-10 flex flex-col items-center justify-center'
@@ -89,141 +94,22 @@ export default function Page() {
         </section>
 
         {/* Text Sections with Line-by-Line Animation */}
-        <section
-          className='relative flex items-center justify-center min-h-screen uppercase snap-center'
-          ref={sectionsRef[1]}
-        >
-          <motion.div initial='hidden' whileInView='visible' variants={lineVariants} className='text-center'>
-            <motion.h2 className={headingClass} variants={lineVariants}>
-              We provide
-            </motion.h2>
-            <motion.p className={paragraphClass} variants={lineVariants}>
-              creative different solutions.
-            </motion.p>
-          </motion.div>
-        </section>
-
-        {/* Additional Full-Screen Text Sections with Consistent Font Sizes */}
-        <section className='relative flex items-center justify-center min-h-screen snap-center' ref={sectionsRef[2]}>
-          <motion.div initial='hidden' whileInView='visible' variants={lineVariants} className='text-center'>
-            <motion.h2 className={headingClass} variants={lineVariants}>
-              고객에게 필요한 시스템의 통합적인 솔루션 제공
-            </motion.h2>
-            <motion.p className={paragraphClass} variants={lineVariants}>
-              고객에게 필요한 시스템의 컨설팅부터 운용까지 통합적인 솔루션을 제공합니다.
-            </motion.p>
-          </motion.div>
-        </section>
-
-        <section
-          className='relative flex items-center justify-center min-h-screen uppercase snap-center'
-          ref={sectionsRef[3]}
-        >
-          <motion.div initial='hidden' whileInView='visible' variants={lineVariants} className='text-center'>
-            <motion.h2 className={headingClass} variants={lineVariants}>
-              다양한 마케팅 프로젝트 수행
-            </motion.h2>
-            <motion.p className={paragraphClass} variants={lineVariants}>
-              스마트폰 어플리케이션을 활용한 다양한 마케팅 프로젝트를 수행하고 있습니다.
-            </motion.p>
-          </motion.div>
-        </section>
-
-        <section className='relative flex items-center justify-center min-h-screen snap-center' ref={sectionsRef[4]}>
-          <motion.div initial='hidden' whileInView='visible' variants={lineVariants} className='text-center'>
-            <motion.h2 className={headingClass} variants={lineVariants}>
-              기업과 소비자 모두의 폭넓은 만족
-            </motion.h2>
-            <motion.p className={paragraphClass} variants={lineVariants}>
-              그동안 축적된 스마트폰 어플리케이션 운영 기술과 마케팅 전략을 통해 기업과 소비자 모두에게 만족을
-              드리겠습니다.
-            </motion.p>
-          </motion.div>
-        </section>
-
-        {/* New Section: Project Direction */}
-        <section className='relative flex items-center justify-center min-h-screen snap-center' ref={sectionsRef[5]}>
-          <motion.div initial='hidden' whileInView='visible' variants={lineVariants} className='text-center'>
-            <motion.h2 className={headingClass} variants={lineVariants}>
-              Project Direction
-            </motion.h2>
-            <motion.p className={paragraphClass} variants={lineVariants}>
-              프로젝트 방향성
-            </motion.p>
-          </motion.div>
-        </section>
-
-        {/* Additional Sections */}
-        <section className='relative flex items-center justify-center min-h-screen snap-center' ref={sectionsRef[6]}>
-          <motion.div initial='hidden' whileInView='visible' variants={lineVariants} className='text-center'>
-            <motion.h2 className={headingClass} variants={lineVariants}>
-              개발
-            </motion.h2>
-            <motion.h3 className={paragraphClass} variants={lineVariants}>
-              development
-            </motion.h3>
-            <motion.p className={paragraphClass} variants={lineVariants}>
-              CNDF만의 독자적 플랫폼을 통한 빠르고 정확한 개발(One Source Multi Use) 자체 플랫폼 사용으로 유지보수 용이
-            </motion.p>
-          </motion.div>
-        </section>
-
-        <section className='relative flex items-center justify-center min-h-screen snap-center' ref={sectionsRef[7]}>
-          <motion.div initial='hidden' whileInView='visible' variants={lineVariants} className='text-center'>
-            <motion.h2 className={headingClass} variants={lineVariants}>
-              운영
-            </motion.h2>
-            <motion.h3 className={paragraphClass} variants={lineVariants}>
-              operation
-            </motion.h3>
-            <motion.p className={paragraphClass} variants={lineVariants}>
-              고객사의 Pop-up 디자인 변경 등 S/W 업데이트 및 운영의 빠른 대응 (고객 요구 T+1 이내 피드백 및 계획수립)
-            </motion.p>
-          </motion.div>
-        </section>
-
-        <section className='relative flex items-center justify-center min-h-screen snap-center' ref={sectionsRef[8]}>
-          <motion.div initial='hidden' whileInView='visible' variants={lineVariants} className='text-center'>
-            <motion.h2 className={headingClass} variants={lineVariants}>
-              마케팅
-            </motion.h2>
-            <motion.h3 className={paragraphClass} variants={lineVariants}>
-              marketing
-            </motion.h3>
-            <motion.p className={paragraphClass} variants={lineVariants}>
-              연 2회 이상 Major Update, 해당 시스템에 해당하는 배포 전략 및 시장 현황에 맞는 바이럴 마케팅/SNS 마케팅 등
-            </motion.p>
-          </motion.div>
-        </section>
-
-        <section className='relative flex items-center justify-center min-h-screen snap-center' ref={sectionsRef[9]}>
-          <motion.div initial='hidden' whileInView='visible' variants={lineVariants} className='text-center'>
-            <motion.h2 className={headingClass} variants={lineVariants}>
-              하드웨어
-            </motion.h2>
-            <motion.h3 className={paragraphClass} variants={lineVariants}>
-              hardware
-            </motion.h3>
-            <motion.p className={paragraphClass} variants={lineVariants}>
-              Co-Location이 아닌 CNDF만의 단독 호스팅을 통한 서버 및 하드웨어 유지보수를 통해 비용 절감 및 보안성
-              확보(ISP 통합 관제)와 하드웨어 장애 시 (M+20 이내) 장애대응 및 복구
-            </motion.p>
-          </motion.div>
-        </section>
-
-        <section className='relative flex items-center justify-center min-h-screen snap-center' ref={sectionsRef[10]}>
-          <motion.div initial='hidden' whileInView='visible' variants={lineVariants} className='text-center'>
-            <motion.h2 className={headingClass} variants={lineVariants}>
-              대고객 서비스
-            </motion.h2>
-            <motion.h3 className={paragraphClass} variants={lineVariants}>
-              customized service
-            </motion.h3>
-            <motion.p className={paragraphClass} variants={lineVariants}>
-              CNDF만의 유지보수 방법론을 통한 대고객 서비스 운영
-            </motion.p>
-          </motion.div>
-        </section>
+        {sectionsRef.current.slice(1).map((ref, index) => (
+          <section
+            key={index + 1}
+            className='relative flex items-center justify-center min-h-screen uppercase snap-center'
+            ref={ref}
+          >
+            <motion.div initial='hidden' whileInView='visible' variants={lineVariants} className='text-center'>
+              <motion.h2 className={headingClass} variants={lineVariants}>
+                {index === 0 ? 'We provide' : `Section ${index + 1}`}
+              </motion.h2>
+              <motion.p className={paragraphClass} variants={lineVariants}>
+                {index === 0 ? 'creative different solutions.' : `Content for Section ${index + 1}`}
+              </motion.p>
+            </motion.div>
+          </section>
+        ))}
       </div>
     </div>
   )
@@ -250,7 +136,6 @@ function DynamicParticleEffect({ currentSection }) {
     camera.updateProjectionMatrix()
   }, [currentSection, camera])
 
-  // Set effect parameters based on section
   const continuousRotation = currentSection >= 1 && currentSection <= 5
   const heartbeatIntensity = currentSection >= 6 && currentSection < 11 ? Math.min(1, (currentSection - 5) * 0.25) : 0
   const burst = currentSection === 11
