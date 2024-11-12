@@ -10,8 +10,8 @@ export default function Page() {
   const [isClient, setIsClient] = useState(false)
   const [currentSection, setCurrentSection] = useState(0)
 
-  // Initialize top-level refs for sections
-  const sectionsRef = useRef([...Array(11)].map(() => useRef(null)))
+  // Use a single ref to store references for all sections
+  const sectionsRef = useRef([])
 
   useEffect(() => {
     setIsClient(true)
@@ -31,7 +31,7 @@ export default function Page() {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            const sectionIndex = sectionsRef.current.findIndex((ref) => ref.current === entry.target)
+            const sectionIndex = sectionsRef.current.findIndex((ref) => ref === entry.target)
             setCurrentSection(sectionIndex + 1)
           }
         })
@@ -40,12 +40,12 @@ export default function Page() {
     )
 
     sectionsRef.current.forEach((ref) => {
-      if (ref.current) observer.observe(ref.current)
+      if (ref) observer.observe(ref)
     })
 
     return () => {
       sectionsRef.current.forEach((ref) => {
-        if (ref.current) observer.unobserve(ref.current)
+        if (ref) observer.unobserve(ref)
       })
     }
   }, [])
