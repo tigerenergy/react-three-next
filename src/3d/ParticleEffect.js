@@ -1,30 +1,67 @@
-// src/3d/ParticleEffect.js
 import { Points, PointMaterial } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
 import { useRef } from 'react'
 import * as THREE from 'three'
 
-export default function ParticleEffect() {
+export default function ParticleEffect({ gather = false }) {
   const pointsRef = useRef()
   const color = new THREE.Color('#1a2ffb') // Neon blue color
 
   // Create random positions and sizes for particles
   const particleCount = 10000
   const positions = new Float32Array(particleCount * 3)
+  const originalPositions = []
+
   for (let i = 0; i < particleCount; i++) {
     const radius = (Math.random() - 0.5) * 100
     const theta = Math.random() * 2 * Math.PI
     const phi = Math.acos(Math.random() * 2 - 1)
 
-    positions[i * 3] = radius * Math.sin(phi) * Math.cos(theta)
-    positions[i * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta)
-    positions[i * 3 + 2] = radius * Math.cos(phi)
+    const x = radius * Math.sin(phi) * Math.cos(theta)
+    const y = radius * Math.sin(phi) * Math.sin(theta)
+    const z = radius * Math.cos(phi)
+
+    positions[i * 3] = x
+    positions[i * 3 + 1] = y
+    positions[i * 3 + 2] = z
+
+    // Store the original positions for easy reset
+    originalPositions.push({ x, y, z })
   }
 
-  // Update particles for floating effect
+  // Update particles for floating effect and gathering animation
   useFrame(() => {
     if (pointsRef.current) {
       pointsRef.current.rotation.y += 0.001
+
+      const positions = pointsRef.current.geometry.attributes.position.array
+
+      for (let i = 0; i < particleCount; i++) {
+        const index = i * 3
+        const targetX = gather ? 0 : originalPositions[i].x
+        const targetY = gather ? 0 : originalPositions[i].y
+        const targetZ = gather ? 0 : originalPositions[i].z
+
+        // Increase gathering speed by using 0.05 instead of 0.02
+        const gatheringSpeed = 0.05
+
+        positions[index] += (targetX - positions[index]) * gatheringSpeed
+        positions[index + 1] += (targetY - positions[index + 1]) * gatheringSpeed
+        positions[index + 2] += (targetZ - positions[index + 2]) * gatheringSpeed
+
+        // Maintain a minimum distance from the center when gathering
+        if (gather) {
+          const minDistance = 1.5
+          const distance = Math.sqrt(positions[index] ** 2 + positions[index + 1] ** 2 + positions[index + 2] ** 2)
+          if (distance < minDistance) {
+            positions[index] *= minDistance / distance
+            positions[index + 1] *= minDistance / distance
+            positions[index + 2] *= minDistance / distance
+          }
+        }
+      }
+
+      pointsRef.current.geometry.attributes.position.needsUpdate = true
     }
   })
 
@@ -39,11 +76,11 @@ export default function ParticleEffect() {
         <PointMaterial
           color={color}
           size={0.1}
-          sizeAttenuation={true} // Scales particles with distance
-          depthWrite={false} // Disable depth writing to prevent overlap artifacts
-          opacity={0.9} // Set to 0.9 for a softer look
+          sizeAttenuation={true}
+          depthWrite={false}
+          opacity={0.9}
           transparent
-          blending={THREE.AdditiveBlending} // Soft glow effect
+          blending={THREE.AdditiveBlending}
         />
       </Points>
     </>
