@@ -43,7 +43,7 @@ export default function ParticleEffect({ gather = false }) {
         const targetZ = gather ? 0 : originalPositions[i].z
 
         // Increase gathering speed by using 0.05 instead of 0.02
-        const gatheringSpeed = 0.05
+        const gatheringSpeed = 0.08
 
         positions[index] += (targetX - positions[index]) * gatheringSpeed
         positions[index + 1] += (targetY - positions[index + 1]) * gatheringSpeed
