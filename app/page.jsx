@@ -23,7 +23,7 @@ export default function Page() {
     visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: 'easeOut', staggerChildren: 0.3 } },
   }
 
-  const sectionsRef = [useRef(null), useRef(null), useRef(null), useRef(null), useRef(null)]
+  const sectionsRef = [useRef(null), useRef(null), useRef(null), useRef(null), useRef(null), useRef(null)]
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -49,7 +49,7 @@ export default function Page() {
     }
   }, [])
 
-  const headingClass = 'text-4xl font-bold sm:text-5xl md:text-6xl lg:text-7xl'
+  const headingClass = 'text-4xl font-bold sm:text-5xl md:text-6xl lg:text-7xl uppercase'
   const paragraphClass = 'mt-4 text-xl sm:text-2xl md:text-3xl lg:text-4xl'
 
   return (
@@ -139,6 +139,18 @@ export default function Page() {
             </motion.p>
           </motion.div>
         </section>
+
+        {/* New Section: Project Direction */}
+        <section className='relative flex items-center justify-center min-h-screen snap-center' ref={sectionsRef[5]}>
+          <motion.div initial='hidden' whileInView='visible' variants={lineVariants} className='text-center'>
+            <motion.h2 className={headingClass} variants={lineVariants}>
+              Project Direction
+            </motion.h2>
+            <motion.p className={paragraphClass} variants={lineVariants}>
+              프로젝트 방향성
+            </motion.p>
+          </motion.div>
+        </section>
       </div>
     </div>
   )
@@ -155,6 +167,7 @@ function DynamicParticleEffect({ currentSection }) {
       3: 100,
       4: 150,
       5: 200,
+      6: 300, // Zoom effect for the last section to gather particles at the center
     }
 
     camera.fov = fovMap[currentSection] || 60
@@ -163,7 +176,7 @@ function DynamicParticleEffect({ currentSection }) {
 
   return (
     <>
-      <ParticleEffect />
+      <ParticleEffect gather={currentSection === 6} />
       <EffectComposer>
         <Bloom luminanceThreshold={0.1} luminanceSmoothing={0.9} intensity={1.5} />
         <DepthOfField focusDistance={0} focalLength={0.02} bokehScale={2} height={480} />
