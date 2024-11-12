@@ -70,7 +70,6 @@ export default function Page() {
 
       {/* Scroll Container with Snap */}
       <div className='h-screen overflow-y-scroll snap-y snap-mandatory'>
-        {/* First Full-Screen Section with Logo */}
         <section className='relative flex items-center justify-center min-h-screen snap-center' ref={sectionsRef[0]}>
           <motion.div
             style={{ opacity: logoOpacity, scale: logoScale }}
