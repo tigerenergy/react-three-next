@@ -10,6 +10,9 @@ export default function Page() {
   const [isClient, setIsClient] = useState(false)
   const [currentSection, setCurrentSection] = useState(0)
 
+  // Top-level refs for sections
+  const sectionsRef = useRef(Array.from({ length: 11 }, () => React.createRef()))
+
   useEffect(() => {
     setIsClient(true)
   }, [])
@@ -17,19 +20,18 @@ export default function Page() {
   const { scrollY } = useScroll()
   const logoOpacity = useTransform(scrollY, [0, 300], [1, 0])
   const logoScale = useTransform(scrollY, [0, 300], [1, 2])
+
   const lineVariants = {
     hidden: { opacity: 0, y: 50 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: 'easeOut', staggerChildren: 0.3 } },
   }
-
-  const sectionsRef = Array.from({ length: 11 }, () => useRef(null))
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            const sectionIndex = sectionsRef.findIndex((ref) => ref.current === entry.target)
+            const sectionIndex = sectionsRef.current.findIndex((ref) => ref.current === entry.target)
             setCurrentSection(sectionIndex + 1)
           }
         })
@@ -37,12 +39,12 @@ export default function Page() {
       { threshold: 0.6 },
     )
 
-    sectionsRef.forEach((ref) => {
+    sectionsRef.current.forEach((ref) => {
       if (ref.current) observer.observe(ref.current)
     })
 
     return () => {
-      sectionsRef.forEach((ref) => {
+      sectionsRef.current.forEach((ref) => {
         if (ref.current) observer.unobserve(ref.current)
       })
     }
