@@ -1,5 +1,5 @@
 'use client'
-import { Suspense, useEffect, useState, useRef } from 'react'
+import React, { Suspense, useEffect, useState, useRef } from 'react'
 import { motion, useTransform, useScroll } from 'framer-motion'
 import { Canvas, useThree } from '@react-three/fiber'
 import { ChevronDown } from 'lucide-react'
@@ -10,8 +10,8 @@ export default function Page() {
   const [isClient, setIsClient] = useState(false)
   const [currentSection, setCurrentSection] = useState(0)
 
-  // Top-level refs for sections
-  const sectionsRef = useRef(Array.from({ length: 11 }, () => React.createRef()))
+  // Initialize top-level refs for sections
+  const sectionsRef = useRef([...Array(11)].map(() => useRef(null)))
 
   useEffect(() => {
     setIsClient(true)
