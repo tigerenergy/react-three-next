@@ -51,7 +51,7 @@ export default function ParticleEffect({ gather = false }) {
 
         // Maintain a minimum distance from the center when gathering
         if (gather) {
-          const minDistance = 1.5
+          const minDistance = 4
           const distance = Math.sqrt(positions[index] ** 2 + positions[index + 1] ** 2 + positions[index + 2] ** 2)
           if (distance < minDistance) {
             positions[index] *= minDistance / distance
