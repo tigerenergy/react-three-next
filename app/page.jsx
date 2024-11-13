@@ -291,6 +291,7 @@ function DynamicParticleEffect({ currentSection }) {
         heartbeatIntensity={heartbeatIntensity}
         minDistance={heartbeatIntensity > 0 ? 1 + (1 - heartbeatIntensity) * 3 : 4}
         burst={burst}
+        currentSection={currentSection} // Pass `currentSection` as a prop
       />
       <EffectComposer>
         <Bloom luminanceThreshold={0.1} luminanceSmoothing={0.9} intensity={1.5} />
