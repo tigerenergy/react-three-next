@@ -9,7 +9,7 @@ export default function ParticleEffect({
   heartbeatIntensity = 0,
   minDistance = 4,
   burst = false,
-  currentSection, // Add `currentSection` here
+  currentSection,
 }) {
   const pointsRef = useRef()
   const baseColor = new THREE.Color('#1a2ffb')
@@ -44,21 +44,24 @@ export default function ParticleEffect({
         pointsRef.current.rotation.y += 0.001
       }
 
-      // Heartbeat effect with gradual enlargement for sections 6-9
+      // Heartbeat effect with gradual, circular enlargement for sections 6-9
       if (heartbeatIntensity > 0 && !burst && currentSection >= 6 && currentSection <= 9) {
         const heartbeatSpeed = 6 + (currentSection - 6) * 2
         const scaleFactor = 1 + Math.sin(clock.getElapsedTime() * heartbeatSpeed) * (heartbeatIntensity * 0.2)
         pointsRef.current.scale.set(scaleFactor, scaleFactor, scaleFactor)
 
-        // Gradually increase minDistance from 4 to a larger value by section 9
+        // Apply minDistance in a circular way to maintain shape
         const dynamicMinDistance = minDistance + (currentSection - 6) * 2
         for (let i = 0; i < particleCount; i++) {
           const index = i * 3
           const distance = Math.sqrt(positions[index] ** 2 + positions[index + 1] ** 2 + positions[index + 2] ** 2)
+
+          // Scale position outward to maintain a circular shape
           if (distance < dynamicMinDistance) {
-            positions[index] *= dynamicMinDistance / distance
-            positions[index + 1] *= dynamicMinDistance / distance
-            positions[index + 2] *= dynamicMinDistance / distance
+            const scalingFactor = dynamicMinDistance / distance
+            positions[index] *= scalingFactor
+            positions[index + 1] *= scalingFactor
+            positions[index + 2] *= scalingFactor
           }
         }
       }
@@ -99,6 +102,7 @@ export default function ParticleEffect({
 
   return (
     <>
+      <ambientLight intensity={1} color='#ffffff' />
       <pointLight position={[15, 20, 15]} intensity={2} color='white' />
       <pointLight position={[-15, -10, -10]} intensity={1} color='#ff4d4d' />
       <pointLight position={[10, -20, 10]} intensity={0.8} color='#4d94ff' />
