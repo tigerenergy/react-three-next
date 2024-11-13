@@ -54,7 +54,7 @@ export default function Page() {
 
   return (
     <div className='relative w-full min-h-screen overflow-hidden text-white bg-black'>
-      {isClient && (
+      {isClient && currentSection <= 11 && (
         <motion.div
           style={{ opacity: logoOpacity }}
           transition={{ duration: 0.5, ease: 'easeOut' }}
@@ -253,6 +253,21 @@ export default function Page() {
             </motion.p>
           </motion.div>
         </section>
+        <section
+          className='relative flex items-center justify-center min-h-screen bg-black snap-center'
+          ref={sectionsRef.current[12]}
+        >
+          <div className='px-6 text-center'>
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, ease: 'easeOut' }}
+              className='text-4xl font-bold uppercase md:text-6xl lg:text-7xl'
+            >
+              AMP Advanced for Multi Platform
+            </motion.h2>
+          </div>
+        </section>
       </div>
     </div>
   )
@@ -291,7 +306,7 @@ function DynamicParticleEffect({ currentSection }) {
         heartbeatIntensity={heartbeatIntensity}
         minDistance={heartbeatIntensity > 0 ? 1 + (1 - heartbeatIntensity) * 3 : 4}
         burst={burst}
-        currentSection={currentSection} // Pass `currentSection` as a prop
+        currentSection={currentSection}
       />
       <EffectComposer>
         <Bloom luminanceThreshold={0.1} luminanceSmoothing={0.9} intensity={1.5} />
