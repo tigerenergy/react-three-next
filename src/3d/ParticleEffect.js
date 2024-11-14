@@ -44,11 +44,13 @@ export default function ParticleEffect({
         const targetY = gather ? 0 : originalPositions[i].y
         const targetZ = gather ? 0 : originalPositions[i].z
 
+        // Gathering effect
         const gatheringSpeed = 0.03
         positions[index] += (targetX - positions[index]) * gatheringSpeed
         positions[index + 1] += (targetY - positions[index + 1]) * gatheringSpeed
         positions[index + 2] += (targetZ - positions[index + 2]) * gatheringSpeed
 
+        // Maintain minimum distance when gathering
         if (gather) {
           const distance = Math.sqrt(positions[index] ** 2 + positions[index + 1] ** 2 + positions[index + 2] ** 2)
           if (distance < minDistance) {
@@ -58,6 +60,7 @@ export default function ParticleEffect({
           }
         }
 
+        // Heartbeat effect for Sections 7 and 8
         if (currentSection === 7 || currentSection === 8) {
           const heartbeatScale = 1 + Math.sin(Date.now() * 0.004) * (heartbeatIntensity + 0.3)
           positions[index] *= heartbeatScale
@@ -65,20 +68,23 @@ export default function ParticleEffect({
           positions[index + 2] *= heartbeatScale
         }
 
+        // Breaking apart effect in Section 9
         if (currentSection === 9) {
           positions[index] += (Math.random() - 0.5) * 3
           positions[index + 1] += (Math.random() - 0.5) * 3
           positions[index + 2] += (Math.random() - 0.5) * 3
         }
 
+        // Explosion and falling effect in Section 10
         if (currentSection === 10) {
-          positions[index + 1] -= 1 // Simulate gravity effect
-          if (positions[index + 1] < -50) positions[index + 1] = -50
-        }
+          // Explosion effect
+          positions[index] += (Math.random() - 0.5) * 10
+          positions[index + 1] += (Math.random() - 0.5) * 10
+          positions[index + 2] += (Math.random() - 0.5) * 10
 
-        if (currentSection === 11) {
-          positions[index + 1] -= 1 // Simulate gravity effect
-          if (positions[index + 1] < -50) positions[index + 1] = -50
+          // Apply gravity to make particles fall to the floor and stop
+          positions[index + 1] -= 0.5 // Apply gravity, make sure it's a negative value to pull particles down
+          if (positions[index + 1] < -50) positions[index + 1] = -50 // Stop at floor level
         }
       }
 
