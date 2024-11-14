@@ -129,25 +129,10 @@ export default function Page() {
             </motion.h2>
           </motion.div>
         </section>
+
         <section
           className='relative flex items-center justify-center min-h-screen snap-center'
           ref={sectionsRef.current[12]}
-        >
-          <motion.div initial='hidden' whileInView='visible' variants={lineVariants} className='text-center'>
-            <motion.h2
-              className='text-4xl font-bold uppercase sm:text-5xl md:text-6xl lg:text-7xl'
-              variants={lineVariants}
-            >
-              AMP는 Advanced for Multi Platform의 약자로,
-            </motion.h2>
-            <motion.p className='mt-4 text-xl uppercase sm:text-2xl md:text-3xl lg:text-4xl' variants={lineVariants}>
-              모바일 및 Web 2.0 에 걸맞는 웹 호환성 개발을 위한
-            </motion.p>
-          </motion.div>
-        </section>
-        <section
-          className='relative flex items-center justify-center min-h-screen snap-center'
-          ref={sectionsRef.current[13]}
         >
           <motion.div initial='hidden' whileInView='visible' variants={lineVariants} className='text-center'>
             <motion.h2
