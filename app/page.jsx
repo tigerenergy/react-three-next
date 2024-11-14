@@ -7,6 +7,7 @@ import { useThree } from '@react-three/fiber'
 import { ChevronDown } from 'lucide-react'
 import ParticleEffect from '../src/3d/ParticleEffect'
 import { EffectComposer, Bloom, DepthOfField } from '@react-three/postprocessing'
+import { Physics } from '@react-three/cannon'
 
 export default function Page() {
   const [isClient, setIsClient] = useState(false)
@@ -60,15 +61,19 @@ export default function Page() {
           <Suspense fallback={null}>
             <Canvas camera={{ position: [0, 0, 10], fov: 60 }}>
               <ambientLight intensity={0.5} />
-              <DynamicParticleEffect currentSection={currentSection} />
+              <Physics gravity={[0, -9.8, 0]}>
+                <DynamicParticleEffect currentSection={currentSection} />
+              </Physics>
+              <EffectComposer>
+                <Bloom luminanceThreshold={0.1} luminanceSmoothing={0.9} intensity={1.5} />
+                <DepthOfField focusDistance={0} focalLength={0.02} bokehScale={2} height={480} />
+              </EffectComposer>
             </Canvas>
           </Suspense>
         </motion.div>
       )}
 
-      {/* Scroll Container with Snap */}
       <div className='h-screen overflow-y-scroll snap-y snap-mandatory'>
-        {/* First Full-Screen Section with Logo */}
         <section
           className='relative flex items-center justify-center min-h-screen snap-center'
           ref={sectionsRef.current[0]}
@@ -90,7 +95,6 @@ export default function Page() {
           </motion.div>
         </section>
 
-        {/* Additional Text Sections */}
         {Array.from({ length: 10 }, (_, index) => (
           <section
             key={index + 1}
@@ -111,7 +115,6 @@ export default function Page() {
           </section>
         ))}
 
-        {/* Last Section */}
         <section
           className='relative flex items-center justify-center min-h-screen bg-black snap-center'
           ref={sectionsRef.current[11]}
@@ -170,7 +173,7 @@ function DynamicParticleEffect({ currentSection }) {
   const burst = currentSection === 11
 
   return (
-    <>
+    <Physics gravity={[0, -9.8, 0]}>
       <ParticleEffect
         gather={currentSection >= 6 && currentSection < 11}
         continuousRotation={continuousRotation}
@@ -180,10 +183,6 @@ function DynamicParticleEffect({ currentSection }) {
         scale={particleScale}
         currentSection={currentSection}
       />
-      <EffectComposer>
-        <Bloom luminanceThreshold={0.1} luminanceSmoothing={0.9} intensity={1.5} />
-        <DepthOfField focusDistance={0} focalLength={0.02} bokehScale={2} height={480} />
-      </EffectComposer>
-    </>
+    </Physics>
   )
 }

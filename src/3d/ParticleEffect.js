@@ -2,6 +2,7 @@ import { Points, PointMaterial } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
 import { useRef } from 'react'
 import * as THREE from 'three'
+import { Physics, usePlane, useBox } from '@react-three/cannon'
 
 export default function ParticleEffect({
   gather = false,
@@ -18,6 +19,7 @@ export default function ParticleEffect({
   const positions = new Float32Array(particleCount * 3)
   const originalPositions = []
 
+  // Initialize particle positions
   for (let i = 0; i < particleCount; i++) {
     const radius = (Math.random() - 0.5) * 100
     const theta = Math.random() * 2 * Math.PI
@@ -32,6 +34,7 @@ export default function ParticleEffect({
     positions[i * 3 + 2] = z
     originalPositions.push({ x, y, z })
   }
+
   useFrame(() => {
     if (pointsRef.current) {
       if (continuousRotation) pointsRef.current.rotation.y += 0.001
@@ -68,23 +71,32 @@ export default function ParticleEffect({
           positions[index + 2] *= heartbeatScale
         }
 
-        // Breaking apart effect in Section 9
+        // Gravity effect in Section 9
         if (currentSection === 9) {
+          // Apply gravity-like effect
+          positions[index + 1] -= 0.3 // Simulate gravity effect to make particles fall
+
+          // Ensure particles stop at floor level (-50)
+          if (positions[index + 1] < -50) {
+            positions[index + 1] = -50 // Settle particles at the floor
+            positions[index] += (Math.random() - 0.5) * 0.2 // Small horizontal spread on x-axis after landing
+            positions[index + 2] += (Math.random() - 0.5) * 0.2 // Small horizontal spread on z-axis after landing
+          }
+        }
+
+        // Breaking apart effect in Section 10
+
+        if (currentSection === 10) {
           positions[index] += (Math.random() - 0.5) * 3
           positions[index + 1] += (Math.random() - 0.5) * 3
           positions[index + 2] += (Math.random() - 0.5) * 3
         }
 
-        // Explosion and falling effect in Section 10
-        if (currentSection === 10) {
-          // Explosion effect
-          positions[index] += (Math.random() - 0.5) * 10
-          positions[index + 1] += (Math.random() - 0.5) * 10
-          positions[index + 2] += (Math.random() - 0.5) * 10
-
-          // Apply gravity to make particles fall to the floor and stop
-          positions[index + 1] -= 0.5 // Apply gravity, make sure it's a negative value to pull particles down
-          if (positions[index + 1] < -50) positions[index + 1] = -50 // Stop at floor level
+        if (currentSection === 11) {
+          // Burst effect
+          positions[index] += (Math.random() - 0.5) * 5
+          positions[index + 1] += (Math.random() - 0.5) * 5
+          positions[index + 2] += (Math.random() - 0.5) * 5
         }
       }
 
@@ -93,7 +105,7 @@ export default function ParticleEffect({
   })
 
   return (
-    <>
+    <Physics>
       <pointLight position={[15, 20, 15]} intensity={1} color='white' />
       <pointLight position={[-15, -10, -10]} intensity={0.5} color='#ff4d4d' />
       <pointLight position={[10, -20, 10]} intensity={0.3} color='#4d94ff' />
@@ -109,6 +121,6 @@ export default function ParticleEffect({
           blending={THREE.AdditiveBlending}
         />
       </Points>
-    </>
+    </Physics>
   )
 }
