@@ -12,7 +12,8 @@ import { Physics } from '@react-three/cannon'
 export default function Page() {
   const [isClient, setIsClient] = useState(false)
   const [currentSection, setCurrentSection] = useState(0)
-  const sectionsRef = useRef([...Array(13)].map(() => React.createRef()))
+  const previousSectionRef = useRef(0)
+  const sectionsRef = useRef([...Array(14)].map(() => React.createRef()))
 
   useEffect(() => {
     setIsClient(true)
@@ -32,7 +33,10 @@ export default function Page() {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             const sectionIndex = sectionsRef.current.findIndex((ref) => ref.current === entry.target)
-            if (sectionIndex !== -1) setCurrentSection(sectionIndex + 1)
+            if (sectionIndex !== -1) {
+              previousSectionRef.current = currentSection // Track previous section
+              setCurrentSection(sectionIndex + 1)
+            }
           }
         })
       },
@@ -48,7 +52,7 @@ export default function Page() {
         if (ref.current) observer.unobserve(ref.current)
       })
     }
-  }, [])
+  }, [currentSection])
 
   return (
     <div className='relative w-full min-h-screen overflow-hidden text-white bg-black'>
@@ -116,12 +120,22 @@ export default function Page() {
         ))}
 
         <section
-          className='relative flex items-center justify-center min-h-screen bg-black snap-center'
+          className='relative flex items-center justify-center min-h-screen snap-center'
           ref={sectionsRef.current[11]}
         >
           <motion.div initial='hidden' whileInView='visible' variants={lineVariants} className='text-center'>
             <motion.h2 className='text-4xl font-bold uppercase md:text-6xl lg:text-7xl' variants={lineVariants}>
               AMP Advanced for Multi Platform
+            </motion.h2>
+          </motion.div>
+        </section>
+        <section
+          className='relative flex items-center justify-center min-h-screen bg-black snap-center'
+          ref={sectionsRef.current[12]}
+        >
+          <motion.div initial='hidden' whileInView='visible' variants={lineVariants} className='text-center'>
+            <motion.h2 className='text-4xl font-bold uppercase md:text-6xl lg:text-7xl' variants={lineVariants}>
+              다음 페이지
             </motion.h2>
           </motion.div>
         </section>
@@ -159,14 +173,14 @@ function DynamicParticleEffect({ currentSection }) {
       9: 300,
       10: 300,
       11: 300,
-      12: 300,
+      12: -200,
     }
 
     camera.fov = fovMap[currentSection] || 60
     camera.updateProjectionMatrix()
   }, [currentSection, camera])
-
-  if (currentSection === 12) return null
+  console.log(currentSection)
+  // if (currentSection === 12) return null
 
   const continuousRotation = currentSection >= 1 && currentSection <= 5
   const heartbeatIntensity = currentSection >= 6 && currentSection < 11 ? Math.min(1, (currentSection - 5) * 0.25) : 0

@@ -1,8 +1,8 @@
 import { Points, PointMaterial } from '@react-three/drei'
-import { useFrame } from '@react-three/fiber'
-import { useRef } from 'react'
+import { useFrame, useThree } from '@react-three/fiber'
+import { useRef, useEffect } from 'react'
 import * as THREE from 'three'
-import { Physics, usePlane, useBox } from '@react-three/cannon'
+import { Physics } from '@react-three/cannon'
 
 export default function ParticleEffect({
   gather = false,
@@ -18,6 +18,8 @@ export default function ParticleEffect({
   const particleCount = 10000
   const positions = new Float32Array(particleCount * 3)
   const originalPositions = []
+  const { camera } = useThree()
+  const initialCameraY = useRef(camera.position.y) // Store initial camera position
 
   // Initialize particle positions
   for (let i = 0; i < particleCount; i++) {
@@ -35,7 +37,14 @@ export default function ParticleEffect({
     originalPositions.push({ x, y, z })
   }
 
-  useFrame(() => {
+  useFrame(({ clock }) => {
+    // Move camera downward only in Section 11, reset if not in Section 11
+    if (currentSection === 11) {
+      camera.position.y -= 0.2 // Adjust speed as needed
+    } else {
+      camera.position.y = initialCameraY.current // Reset to initial position
+    }
+
     if (pointsRef.current) {
       if (continuousRotation) pointsRef.current.rotation.y += 0.001
 
@@ -73,30 +82,35 @@ export default function ParticleEffect({
 
         // Gravity effect in Section 9
         if (currentSection === 9) {
-          // Apply gravity-like effect
-          positions[index + 1] -= 0.3 // Simulate gravity effect to make particles fall
-
-          // Ensure particles stop at floor level (-50)
+          positions[index + 1] -= 0.3
           if (positions[index + 1] < -50) {
-            positions[index + 1] = -50 // Settle particles at the floor
-            positions[index] += (Math.random() - 0.5) * 0.2 // Small horizontal spread on x-axis after landing
-            positions[index + 2] += (Math.random() - 0.5) * 0.2 // Small horizontal spread on z-axis after landing
+            positions[index + 1] = -50
+            positions[index] += (Math.random() - 0.5) * 0.2
+            positions[index + 2] += (Math.random() - 0.5) * 0.2
           }
         }
 
         // Breaking apart effect in Section 10
-
         if (currentSection === 10) {
           positions[index] += (Math.random() - 0.5) * 3
           positions[index + 1] += (Math.random() - 0.5) * 3
           positions[index + 2] += (Math.random() - 0.5) * 3
         }
 
-        if (currentSection === 11) {
-          // Burst effect
-          positions[index] += (Math.random() - 0.5) * 5
-          positions[index + 1] += (Math.random() - 0.5) * 5
-          positions[index + 2] += (Math.random() - 0.5) * 5
+        // Enhanced wave effect for Section 12
+        if (currentSection === 12) {
+          const waveFrequencyX = 0.05
+          const waveFrequencyY = 0.08
+          const waveAmplitudeX = 10
+          const waveAmplitudeY = 7
+          const waveSpeedX = 0.5
+          const waveSpeedY = 0.6
+
+          // Apply multiple wave effects along the Z-axis for a layered wave effect
+          positions[index + 2] =
+            Math.sin(positions[index] * waveFrequencyX + clock.elapsedTime * waveSpeedX) * waveAmplitudeX +
+            Math.cos(positions[index + 1] * waveFrequencyY + clock.elapsedTime * waveSpeedY) * waveAmplitudeY +
+            Math.sin((positions[index] + positions[index + 1]) * 0.03 + clock.elapsedTime * 0.8) * 3
         }
       }
 
