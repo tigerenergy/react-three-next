@@ -154,42 +154,10 @@ export default function Page() {
               className='text-4xl font-bold uppercase sm:text-5xl md:text-6xl lg:text-7xl'
               variants={lineVariants}
             >
-              ㈜씨앤디팩토리의 프레임워크입니다.
+              NEXT
             </motion.h2>
             <motion.p className='mt-4 text-xl uppercase sm:text-2xl md:text-3xl lg:text-4xl' variants={lineVariants}>
-              AMP 프레임워크의 Dashboard Component 를 통하여
-            </motion.p>
-          </motion.div>
-        </section>
-        <section
-          className='relative flex items-center justify-center min-h-screen snap-center'
-          ref={sectionsRef.current[14]}
-        >
-          <motion.div initial='hidden' whileInView='visible' variants={lineVariants} className='text-center'>
-            <motion.h2
-              className='text-4xl font-bold uppercase sm:text-5xl md:text-6xl lg:text-7xl'
-              variants={lineVariants}
-            >
-              ERP, EP, E-Pro, EIS 등 의 통합 Dashboard 를 작하고,
-            </motion.h2>
-            <motion.p className='mt-4 text-xl uppercase sm:text-2xl md:text-3xl lg:text-4xl' variants={lineVariants}>
-              제작된 정보를 통해 기업의 경영지표, 통합 차트를 전체
-            </motion.p>
-          </motion.div>
-        </section>
-        <section
-          className='relative flex items-center justify-center min-h-screen snap-center'
-          ref={sectionsRef.current[15]}
-        >
-          <motion.div initial='hidden' whileInView='visible' variants={lineVariants} className='text-center'>
-            <motion.h2
-              className='text-4xl font-bold uppercase sm:text-5xl md:text-6xl lg:text-7xl'
-              variants={lineVariants}
-            >
-              Mobile 환경 및 Web환경(Explorer, Chrome, Firefox, Safari) 등 에서
-            </motion.h2>
-            <motion.p className='mt-4 text-xl uppercase sm:text-2xl md:text-3xl lg:text-4xl' variants={lineVariants}>
-              손쉽게 접근 가능합니다.
+              NEXT
             </motion.p>
           </motion.div>
         </section>
@@ -228,9 +196,6 @@ function DynamicParticleEffect({ currentSection }) {
       10: 300,
       11: 300,
       12: -150,
-      13: -100,
-      14: -50,
-      15: -1,
     }
 
     camera.fov = fovMap[currentSection] || 60
