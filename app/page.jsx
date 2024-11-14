@@ -173,7 +173,7 @@ function DynamicParticleEffect({ currentSection }) {
       9: 300,
       10: 300,
       11: 300,
-      12: -200,
+      12: -150,
     }
 
     camera.fov = fovMap[currentSection] || 60
