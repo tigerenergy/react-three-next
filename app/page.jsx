@@ -63,7 +63,7 @@ export default function Page() {
           className='absolute inset-0 z-0'
         >
           <Suspense fallback={null}>
-            <Canvas camera={{ position: [0, 0, 10], fov: 60 }}>
+            <Canvas camera={{ position: [0, 0, 10], fov: 80 }}>
               <ambientLight intensity={0.5} />
               <Physics gravity={[0, -9.8, 0]}>
                 <DynamicParticleEffect currentSection={currentSection} />
