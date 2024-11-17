@@ -16,7 +16,8 @@ export const Blob = ({ route = '/', ...props }) => {
       onClick={() => router.push(route)}
       onPointerOver={() => hover(true)}
       onPointerOut={() => hover(false)}
-      {...props}>
+      {...props}
+    >
       <sphereGeometry args={[1, 64, 64]} />
       <MeshDistortMaterial roughness={0.5} color={hovered ? 'hotpink' : '#1fb2f5'} />
     </mesh>
@@ -35,7 +36,7 @@ export const Logo = ({ route = '/blob', ...props }) => {
     const t = state.clock.getElapsedTime()
     mesh.current.rotation.y = Math.sin(t) * (Math.PI / 8)
     mesh.current.rotation.x = Math.cos(t) * (Math.PI / 8)
-    mesh.current.rotation.z -= delta / 4
+    mesh.current.rotation.z -= delta / 3
   })
 
   return (
